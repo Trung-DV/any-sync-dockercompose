@@ -1,0 +1,7 @@
+services:
+  generateconfig-env:
+    build:
+      context: .
+      dockerfile: Dockerfile-generateconfig-env
+    volumes:
+      - ./:/code:Z
