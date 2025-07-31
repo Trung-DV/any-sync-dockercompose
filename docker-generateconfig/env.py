@@ -9,7 +9,7 @@ import re
 cfg = {
     'inputFile': '.env.default',
     'overrideFile': '.env.override',
-    'outputFile': '.env',
+    'outputFile': '.env.out',
     'overrideVarMap': {
         'ANY_SYNC_NODE_VERSION': 'pkg::any-sync-node',
         'ANY_SYNC_FILENODE_VERSION': 'pkg::any-sync-filenode',
@@ -81,16 +81,9 @@ for key,value in envVars.items():
             if lastVersionKey and lastVersionValue:
                 envVars[key] = 'v'+str(lastVersionValue)
 
-print(f"DEBUG: =======================================================================================================")
-print(f"DEBUG: envVars={json.dumps(envVars, indent=4)}")
-print(f"DEBUG: =======================================================================================================")
 # save in output file
 with open(cfg['outputFile'], 'w') as file:
     file.write(cfg['outputFileHeader'])
     for key, value in envVars.items():
         file.write(f"{key}={value}\n")
 
-with open('.env.out', 'w') as file:
-    file.write(cfg['outputFileHeader'])
-    for key, value in envVars.items():
-        file.write(f"{key}={value}\n")

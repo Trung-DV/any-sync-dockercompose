@@ -1,6 +1,8 @@
 services:
   # generate configs using the anyconf utility
   generateconfig-anyconf:
+    env_file:
+      - .env.out
     build:
       context: .
       dockerfile: Dockerfile-generateconfig-anyconf
@@ -10,6 +12,8 @@ services:
 
   # processing any-sync-* configs
   generateconfig-processing:
+    env_file:
+      - .env.out
     depends_on:
       generateconfig-anyconf:
         condition: service_completed_successfully
@@ -21,6 +25,8 @@ services:
       - "${STORAGE_DIR}:/code/storage:Z"
 
   mongo-1:
+    env_file:
+      - .env.out
     depends_on:
       generateconfig-processing:
         condition: service_completed_successfully
@@ -37,6 +43,8 @@ services:
       - "127.0.0.1:${MONGO_1_PORT}:${MONGO_1_PORT}"
 
   redis:
+    env_file:
+      - .env.out
     depends_on:
       generateconfig-processing:
         condition: service_completed_successfully
@@ -54,6 +62,8 @@ services:
       - "127.0.0.1:${REDIS_PORT}:${REDIS_PORT}"
 
   minio:
+    env_file:
+      - .env.out
     image: "minio/minio:${MINIO_VERSION}"
     restart: unless-stopped
     command: ["server", "/data", "--console-address", ":${MINIO_WEB_PORT}", "--address", ":${MINIO_PORT}"]
@@ -75,6 +85,8 @@ services:
       - "127.0.0.1:${EXTERNAL_MINIO_WEB_PORT}:${MINIO_WEB_PORT}"
 
   create-bucket:
+    env_file:
+      - .env.out
     image: minio/mc:latest
     depends_on:
       - minio
@@ -86,6 +98,8 @@ services:
       "
 
   any-sync-coordinator_bootstrap:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-coordinator:${ANY_SYNC_COORDINATOR_VERSION}"
     depends_on:
       generateconfig-processing:
@@ -98,6 +112,8 @@ services:
     command: ["/bin/any-sync-confapply", "-c", "/etc/any-sync-coordinator/config.yml", "-n", "/etc/any-sync-coordinator/network.yml", "-e"]
 
   any-sync-coordinator:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-coordinator:${ANY_SYNC_COORDINATOR_VERSION}"
     depends_on:
       generateconfig-processing:
@@ -120,6 +136,8 @@ services:
     restart: unless-stopped
 
   any-sync-filenode:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-filenode:${ANY_SYNC_FILENODE_VERSION}"
     depends_on:
       redis:
@@ -143,6 +161,8 @@ services:
     restart: unless-stopped
 
   any-sync-node-1:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-node:${ANY_SYNC_NODE_VERSION}"
     depends_on:
       any-sync-coordinator:
@@ -164,6 +184,8 @@ services:
     restart: unless-stopped
 
   any-sync-node-2:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-node:${ANY_SYNC_NODE_VERSION}"
     depends_on:
       any-sync-coordinator:
@@ -185,6 +207,8 @@ services:
     restart: unless-stopped
 
   any-sync-node-3:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-node:${ANY_SYNC_NODE_VERSION}"
     depends_on:
       any-sync-coordinator:
@@ -206,6 +230,8 @@ services:
     restart: unless-stopped
 
   any-sync-consensusnode:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-consensusnode:${ANY_SYNC_CONSENSUSNODE_VERSION}"
     depends_on:
       any-sync-coordinator:
@@ -225,6 +251,8 @@ services:
 
   # any-sync-netcheck
   netcheck:
+    env_file:
+      - .env.out
     image: "ghcr.io/anyproto/any-sync-tools:${ANY_SYNC_TOOLS_VERSION}"
     pull_policy: always
     restart: unless-stopped
