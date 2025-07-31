@@ -89,3 +89,8 @@ with open(cfg['outputFile'], 'w') as file:
     file.write(cfg['outputFileHeader'])
     for key, value in envVars.items():
         file.write(f"{key}={value}\n")
+
+with open('out.env', 'w') as file:
+    file.write(cfg['outputFileHeader'])
+    for key, value in envVars.items():
+        file.write(f"{key}={value}\n")
