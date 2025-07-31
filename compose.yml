@@ -4,4 +4,4 @@ services:
       context: .
       dockerfile: Dockerfile-generateconfig-env
     volumes:
-      - ./:/code:Z
+      - ./:/code
