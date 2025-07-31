@@ -81,6 +81,9 @@ for key,value in envVars.items():
             if lastVersionKey and lastVersionValue:
                 envVars[key] = 'v'+str(lastVersionValue)
 
+print(f"DEBUG: =======================================================================================================")
+print(f"DEBUG: envVars={json.dumps(envVars, indent=4)}")
+print(f"DEBUG: =======================================================================================================")
 # save in output file
 with open(cfg['outputFile'], 'w') as file:
     file.write(cfg['outputFileHeader'])
