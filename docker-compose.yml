@@ -1,6 +1,7 @@
 services:
   # generate configs using the anyconf utility
   generateconfig-anyconf:
+    restart: no
     build:
       context: .
       dockerfile: Dockerfile-generateconfig-anyconf
