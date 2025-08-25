@@ -23,7 +23,7 @@ echo "INFO: Create config for clients"
 cp "./storage/docker-generateconfig/nodesProcessed.yml" "${DEST_PATH}/client.yml"
 
 echo "INFO: Generate network file"
-yq eval '. as $item | {"network": $item}' --indent 2 ./storage/docker-generateconfig/nodesProcessed.yml > "${NETWORK_FILE}"
+yq eval '. as $item | {"network": $item}' --indent 2 ./storage/docker-generateconfig/nodesProcessed.yml | tee "${NETWORK_FILE}"
 
 echo "INFO: Generate config files for 3 nodes"
 for i in {0..2}; do
